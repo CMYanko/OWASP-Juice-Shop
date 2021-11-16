@@ -29,11 +29,11 @@ jobs:
         java-version: 1.8
     - name: "Install CLI tools"
       run: npm install -g @angular/cli
-    - name: "Install application"
+    - name: Analyze with NG SAST
       run: |
-        npm install --ignore-scripts
-        cd frontend
-        npm install --ignore-scripts
+        npm install
+        rm -rf node_modules
+        rm -rf frontend/dist frontend/node_modules dist build
     - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
