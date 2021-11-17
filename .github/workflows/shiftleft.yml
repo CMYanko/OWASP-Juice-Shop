@@ -31,6 +31,8 @@ jobs:
       run: |
         npm install --ignore-scripts
         rm -rf node_modules
+        cd frontend
+        npm install --ignore-scripts
         rm -rf frontend/dist frontend/node_modules dist build
     - name: Extract branch name
       shell: bash
