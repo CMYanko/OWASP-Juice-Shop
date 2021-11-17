@@ -27,20 +27,20 @@ jobs:
       uses: actions/setup-java@v1.4.3
       with:
         java-version: 1.8
-    - name: Setup Node.js environment
-      uses: actions/setup-node@v2.4.1
-      with:
-        # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
-        node-version: 16.x
-    - name: Analyze with NG SAST
+    - name: Scan Prep
       run: |
-        npm install
+        npm install --ignore-scripts
         rm -rf node_modules
         rm -rf frontend/dist frontend/node_modules dist build
     - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: extract_branch
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2.4.1
+      with:
+        # Version Spec of the version to use.  Examples: 12.x, 10.15.1, >=10.15.0
+        node-version: 16.x      
     - name: NextGen Static Analysis
       run: ${GITHUB_WORKSPACE}/sl analyze --wait --app OWASP-juice-shop --tag app.group=VBD --tag branch=${{ github.head_ref || steps.extract_branch.outputs.branch }} --js --cpg . -- --with-tests --include-configs --exclude node_modules,frontend/dist,frontend/node_modules,vagrant,dist,data/static,build
       env:
